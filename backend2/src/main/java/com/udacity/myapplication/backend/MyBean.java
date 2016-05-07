@@ -1,4 +1,4 @@
-package com.google.builditbigger;
+package com.udacity.myapplication.backend;
 
 /**
  * The object model for the data we are sending through endpoints

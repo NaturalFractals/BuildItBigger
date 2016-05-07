@@ -10,6 +10,7 @@ android {
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -17,14 +18,19 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    dexOptions {
+        javaMaxHeapSize "4g"
+    }
+
 }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:23.3.0'
     // Added for AdMob
-    compile 'com.google.android.gms:play-services:8.4.0'
-    compile project (':javajokes')
-    compile project (':jokeslibrary')
-    compile 'com.google.appengine:appengine-endpoints:1.9.18'
+    compile project(':javajokes')
+    compile project(':jokeslibrary')
+    compile 'com.android.support:appcompat-v7:24.0.0-alpha2'
+    compile 'com.google.android.gms:play-services-ads:8.4.0'
+    compile project(path: ':backend2', configuration: 'android-endpoints')
 }
