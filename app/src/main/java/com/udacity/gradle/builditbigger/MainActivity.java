@@ -8,7 +8,6 @@ import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.developer.jc.jokeslibrary.JokesActivity;
 import com.example.Joker;
@@ -20,7 +19,8 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        new EndpointsAsyncTask().execute(new Pair<Context, String>(this, "Manfred"));
+        //Execute new EndpointsAsyncTask
+        new EndpointsAsyncTask(this).execute(new Pair<Context, String>(this, "Manfred"));
     }
 
 
@@ -47,11 +47,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void tellJoke(View view){
-        Joker myJoker = new Joker();
-        String joke = myJoker.getJoke();
-        Intent intent = new Intent(this, JokesActivity.class);
-        intent.putExtra("JOKE", joke);
-        startActivity(intent);
+        new EndpointsAsyncTask(this).execute(new Pair<Context, String>(this, "Joke"));
     }
 
 

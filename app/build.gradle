@@ -10,7 +10,6 @@ android {
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
-        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -33,4 +32,6 @@ dependencies {
     compile 'com.android.support:appcompat-v7:24.0.0-alpha2'
     compile 'com.google.android.gms:play-services-ads:8.4.0'
     compile project(path: ':backend2', configuration: 'android-endpoints')
+    androidTestCompile 'junit:junit:4.12'
+    compile 'com.android.support.test:runner:0.3'
 }

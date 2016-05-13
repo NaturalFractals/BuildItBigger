@@ -3,7 +3,7 @@ package com.example;
 import java.util.Random;
 
 public class Joker {
-    public static final String[] JOKES = {"Joke 1", "Joke 2", "Joke 3"};
+    public static final String[] JOKES = {"Joke"};
 
     public String getJoke() {
         Random random = new Random();

@@ -8,8 +8,6 @@ import android.widget.Toast;
 
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
-import com.google.api.client.googleapis.services.AbstractGoogleClientRequest;
-import com.google.api.client.googleapis.services.GoogleClientRequestInitializer;
 import com.udacity.myapplication.backend.myApi.MyApi;
 
 import java.io.IOException;
@@ -19,6 +17,7 @@ import java.io.IOException;
  */
 class EndpointsAsyncTask extends AsyncTask<Pair<Context, String>, Void, String> {
     private static MyApi myApiService;
+    private EndpointsAsyncTaskListener mEndpointsAsyncTaskListener;
 
     static {
         myApiService = null;
@@ -26,31 +25,25 @@ class EndpointsAsyncTask extends AsyncTask<Pair<Context, String>, Void, String> 
 
     private Context context;
 
+    public EndpointsAsyncTask(Context context) {
+        this.context = context;
+    }
+
     @Override
     protected String doInBackground(Pair<Context, String>... params) {
-        if(myApiService == null) {  // Only do this once
-            MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(),
-                    new AndroidJsonFactory(), null)
-                    // options for running against local devappserver
-                    // - 10.0.2.2 is localhost's IP address in Android emulator
-                    // - turn off compression when running against local devappserver
-                    .setRootUrl("http://10.0.2.2:8080/_ah/api/")
-                    .setGoogleClientRequestInitializer(new GoogleClientRequestInitializer() {
-                        @Override
-                        public void initialize(AbstractGoogleClientRequest<?> abstractGoogleClientRequest) throws IOException {
-                            abstractGoogleClientRequest.setDisableGZipContent(true);
-                        }
-                    });
-            // end options for devappserver
+        if(myApiService == null) {
+        // Only do this once
+            MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
+                    .setRootUrl("https://builditbigger-1304.appspot.com/_ah/api/");
+            //above url is address for project on google endpoint server
 
             myApiService = builder.build();
         }
 
         context = params[0].first;
-        String name = params[0].second;
 
         try {
-            return myApiService.sayHi(name).execute().getData();
+            return myApiService.sayJoke().execute().getData();
         } catch (IOException e) {
             return e.getMessage();
         }
@@ -58,6 +51,24 @@ class EndpointsAsyncTask extends AsyncTask<Pair<Context, String>, Void, String> 
 
     @Override
     protected void onPostExecute(String result) {
+        //On success make toast to UI (this will be in the main activity fragment)
         Toast.makeText(context, result, Toast.LENGTH_LONG).show();
+        //If listener exist, call onComplete method
+        if(mEndpointsAsyncTaskListener != null) {
+            mEndpointsAsyncTaskListener.onCompleted(result);
+        }
+    }
+
+    public Context getContext() {
+        return context;
+    }
+
+    public EndpointsAsyncTask setListener(EndpointsAsyncTaskListener listener) {
+        mEndpointsAsyncTaskListener = listener;
+        return this;
+    }
+
+    public interface EndpointsAsyncTaskListener {
+        void onCompleted(String joke);
     }
 }
