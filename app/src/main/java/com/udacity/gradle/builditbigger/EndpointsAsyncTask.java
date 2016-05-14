@@ -39,7 +39,7 @@ class EndpointsAsyncTask extends AsyncTask<Pair<Context, String>, Void, String> 
 
             myApiService = builder.build();
         }
-
+        //Gets context from parameter input
         context = params[0].first;
 
         try {
