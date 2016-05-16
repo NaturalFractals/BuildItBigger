@@ -1,8 +1,11 @@
 package com.udacity.gradle.builditbigger;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Pair;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 
@@ -18,12 +21,12 @@ import java.io.IOException;
 class EndpointsAsyncTask extends AsyncTask<Pair<Context, String>, Void, String> {
     private static MyApi myApiService;
     private EndpointsAsyncTaskListener mEndpointsAsyncTaskListener;
+    private Context context;
+
 
     static {
         myApiService = null;
     }
-
-    private Context context;
 
     public EndpointsAsyncTask(Context context) {
         this.context = context;
@@ -51,12 +54,15 @@ class EndpointsAsyncTask extends AsyncTask<Pair<Context, String>, Void, String> 
 
     @Override
     protected void onPostExecute(String result) {
+        ProgressBar spinner = (ProgressBar) ((Activity)context).findViewById(R.id.progressBar1);
+        spinner.setVisibility(View.GONE);
         //On success make toast to UI (this will be in the main activity fragment)
         Toast.makeText(context, result, Toast.LENGTH_LONG).show();
         //If listener exist, call onComplete method
         if(mEndpointsAsyncTaskListener != null) {
             mEndpointsAsyncTaskListener.onCompleted(result);
         }
+
     }
 
     public Context getContext() {

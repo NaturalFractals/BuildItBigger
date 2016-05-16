@@ -1,20 +1,28 @@
 package com.udacity.gradle.builditbigger;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
 
 public class MainActivity extends ActionBarActivity {
+
+    private ProgressBar spinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //Execute new EndpointsAsyncTask
+
+        spinner = (ProgressBar) findViewById(R.id.progressBar1);
+        spinner.setVisibility(View.GONE);
+
+
     }
 
 
@@ -41,7 +49,9 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void tellJoke(View view){
-        new EndpointsAsyncTask(this).execute(new Pair<Context, String>(this, "Joke"));
+        EndpointsAsyncTask task = new EndpointsAsyncTask(this);
+        task.execute(new Pair<Context, String>(this, "Joke"));
+        spinner.setVisibility(View.VISIBLE);
     }
 
 
